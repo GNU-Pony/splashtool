@@ -21,13 +21,16 @@
 import os
 
 
+DEBUG = False
+
+
 timeout = 0
 title = ''
 background = 'splash.png'
 font = '/usr/share/kbd/consolefonts/default8x16.psfu.gz'
 helptext = ''
 labels = ''
-width = 60
+width = 78
 margin = 3
 rows = 12
 vshift = 0
@@ -103,38 +106,49 @@ while True:
         break
 
 
+if DEBUG:
+    colour_border = ''
+    colour_title = ''
+    colour_sel = ''
+    colour_unsel = ''
+    colour_help = ''
+    colour_timeout_msg = ''
+    colour_timeout = ''
+    colour_tabmsg = ''
+
+
 border = colour_border
 
 labels = (labels + '\n' * rows).split('\n')[:rows]
-labels = [(' ' + x + ' ' * width)[:width] + '\033\033' for x in labels]
+labels = [(' ' + x + ' ' * 58)[:58] + '\033\033' for x in labels]
 labels = ['\033' + (colour_sel if x is labels[0] else colour_unsel) + '\033' + x for x in labels]
 
-title = (' ' * ((width - len(title)) // 2) + title + ' ' * width)[:width]
+title = (' ' * ((58 - len(title)) // 2) + title + ' ' * 58)[:58]
 title = '\033' + colour_title + '\033' + title + '\033\033'
 
 helpmsgendrow -= vshift
 helptext = (helptext + '\n' * (helpmsgendrow - helpmsgrow)).split('\n')[: helpmsgendrow - helpmsgrow + 1]
-helptext = ['\033' + colour_help + '\033' + (' ' * margin + x + ' ' * 86)[:86] + '\033\033' for x in helptext]
+helptext = ['\033' + colour_help + '\033' + (' ' * margin + x + ' ' * width)[:width] + '\033\033' for x in helptext]
 helptext = '\n'.join(helptext)
 
-menumargin = (86 - width) // 2
-text = '\n' * vshift + ' ' * menumargin + '\033' + border + '\033┌' + '─' * width + '┐\033\033\n'
+menumargin = (width - 60) // 2
+text = '\n' * vshift + ' ' * menumargin + '\033' + border + '\033┌' + '─' * 58 + '┐\033\033\n'
 text += ' ' * menumargin + '\033' + border + '\033│\033\033' + title + '\033' + border + '\033│\033\033\n'
-text += ' ' * menumargin + '\033' + border + '\033├' + '─' * width + '┤\033\033\n'
+text += ' ' * menumargin + '\033' + border + '\033├' + '─' * 58 + '┤\033\033\n'
 for label in labels:
     text += ' ' * menumargin + '\033' + border + '\033│\033\033' + label + '\033' + border + '\033│\033\033\n'
-text += ' ' * menumargin + '\033' + border + '\033└' + '─' * width + '┘\033\033\n'
+text += ' ' * menumargin + '\033' + border + '\033└' + '─' * 58 + '┘\033\033\n'
 
 more = []
 
 if timeout > 0:
     timeoutmsg = 'Automatic boot in %i seconds' % (timeout // 10)
-    timeoutmsg = (86 - len(timeoutmsg)) // 2
+    timeoutmsg = (width - len(timeoutmsg)) // 2
     timeoutmsg = ' ' * timeoutmsg + '\033%s\033Automatic boot in \033%s\033%i\033%s\033 seconds...\033\033'
     timeoutmsg %= (colour_timeout_msg, colour_timeout, timeout // 10, colour_timeout_msg)
     more.append((timeoutrow * 10 + 0, timeoutmsg))
 tabmsg = 'Press [Tab] to edit options'
-tabmsg = ' ' * ((86 - len(tabmsg)) // 2) + tabmsg
+tabmsg = ' ' * ((width - len(tabmsg)) // 2) + tabmsg
 more.append((tabmsgrow * 10 + 1, '\033%s\033%s\033\033' % (colour_tabmsg, tabmsg)))
 more.append((helpmsgrow * 10 + 2, helptext))
 
@@ -148,7 +162,12 @@ for seg in more:
 
 text = background + '\n' + '\n'.join((text + '\n' * 30).split('\n')[:30])
 
+print(width)
+print(30)
+if DEBUG:
+    text = text.replace('\033', '')
 print(text, end = '')
 
-os.system('bash -c "psf2txt <(gunzip < \'%s\') /dev/stderr 2>&1 >/dev/null | grep -v ++"' % font.replace('\'', '\'\\\'\''))
+if not DEBUG:
+    os.system('bash -c "psf2txt <(gunzip < \'%s\') /dev/stderr 2>&1 >/dev/null | grep -v ++"' % font.replace('\'', '\'\\\'\''))
 
