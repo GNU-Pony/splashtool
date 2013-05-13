@@ -172,5 +172,8 @@ print(text, end = '')
 sys.stdout.flush()
 
 if not DEBUG:
-    os.system('bash -c "psf2txt <(gunzip < \'%s\') /dev/stderr 2>&1 >/dev/null | grep -v ++"' % font.replace('\'', '\'\\\'\''))
+    if font.lower().endswith('.gz'):
+        os.system('bash -c "psf2txt <(gunzip < \'%s\') /dev/stderr 2>&1 >/dev/null | grep -v ++"' % font.replace('\'', '\'\\\'\''))
+    else:
+        os.system('bash -c "psf2txt \'%s\' /dev/stderr 2>&1 >/dev/null | grep -v ++"' % font.replace('\'', '\'\\\'\''))
 
