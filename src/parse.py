@@ -103,17 +103,6 @@ while True:
         break
 
 
-colour_border = ''
-colour_title = ''
-colour_sel = ''
-colour_unsel = ''
-colour_help = ''
-colour_timeout_msg = ''
-colour_timeout = ''
-colour_tabmsg = ''
-
-
-
 border = colour_border
 
 labels = (labels + '\n' * rows).split('\n')[:rows]
@@ -159,7 +148,7 @@ for seg in more:
 
 text = background + '\n' + '\n'.join((text + '\n' * 30).split('\n')[:30])
 
-print(text.replace('\033', ''), end = '')
+print(text, end = '')
 
 os.system('bash -c "psf2txt <(gunzip < \'%s\') /dev/stderr 2>&1 >/dev/null | grep -v ++"' % font.replace('\'', '\'\\\'\''))
 
