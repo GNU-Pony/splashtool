@@ -1,0 +1,12 @@
+_/
+bin/
+\#*\#
+.*
+!.git*
+*.bak
+*.swp
+*.swo
+*.png
+*.class
+*~
+
