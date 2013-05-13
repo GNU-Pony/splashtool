@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 
 
 DEBUG = False
@@ -120,24 +121,24 @@ if DEBUG:
 border = colour_border
 
 labels = (labels + '\n' * rows).split('\n')[:rows]
-labels = [(' ' + x + ' ' * 58)[:58] + '\033\033' for x in labels]
+labels = [(' ' + x + ' ' * 68)[:68] + '\033\033' for x in labels]
 labels = ['\033' + (colour_sel if x is labels[0] else colour_unsel) + '\033' + x for x in labels]
 
-title = (' ' * ((58 - len(title)) // 2) + title + ' ' * 58)[:58]
+title = (' ' * ((68 - len(title)) // 2) + title + ' ' * 68)[:68]
 title = '\033' + colour_title + '\033' + title + '\033\033'
 
 helpmsgendrow -= vshift
-helptext = (helptext + '\n' * (helpmsgendrow - helpmsgrow)).split('\n')[: helpmsgendrow - helpmsgrow + 1]
+helptext = (helptext + '\n' * (helpmsgendrow - helpmsgrow + 2)).split('\n')[: helpmsgendrow - helpmsgrow + 2]
 helptext = ['\033' + colour_help + '\033' + (' ' * margin + x + ' ' * width)[:width] + '\033\033' for x in helptext]
 helptext = '\n'.join(helptext)
 
-menumargin = (width - 60) // 2
-text = '\n' * vshift + ' ' * menumargin + '\033' + border + '\033┌' + '─' * 58 + '┐\033\033\n'
+menumargin = (width - 70) // 2
+text = '\n' * vshift + ' ' * menumargin + '\033' + border + '\033┌' + '─' * 68 + '┐\033\033\n'
 text += ' ' * menumargin + '\033' + border + '\033│\033\033' + title + '\033' + border + '\033│\033\033\n'
-text += ' ' * menumargin + '\033' + border + '\033├' + '─' * 58 + '┤\033\033\n'
+text += ' ' * menumargin + '\033' + border + '\033├' + '─' * 68 + '┤\033\033\n'
 for label in labels:
     text += ' ' * menumargin + '\033' + border + '\033│\033\033' + label + '\033' + border + '\033│\033\033\n'
-text += ' ' * menumargin + '\033' + border + '\033└' + '─' * 58 + '┘\033\033\n'
+text += ' ' * menumargin + '\033' + border + '\033└' + '─' * 68 + '┘\033\033\n'
 
 more = []
 
@@ -160,13 +161,15 @@ for seg in more:
         text += '\n' * (seg[0] - line) + seg[1] + '\n'
         line = seg[0] + len(seg[1].split('\n'))
 
-text = background + '\n' + '\n'.join((text + '\n' * 30).split('\n')[:30])
+text = '\n'.join((text + '\n' * 30).split('\n')[:30])
 
+print(background)
 print(width)
-print(30)
+print(29)
 if DEBUG:
     text = text.replace('\033', '')
 print(text, end = '')
+sys.stdout.flush()
 
 if not DEBUG:
     os.system('bash -c "psf2txt <(gunzip < \'%s\') /dev/stderr 2>&1 >/dev/null | grep -v ++"' % font.replace('\'', '\'\\\'\''))
