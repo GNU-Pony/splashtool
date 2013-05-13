@@ -43,21 +43,83 @@ colour_timeout = '#ffffff00#00000000'
 colour_tabmsg = '#ffffff00#00000000'
 
 
+texthelp = False
 while True:
     try:
         line = input()
-        
+        orig = line
+        while '  ' in line:
+            line = line.replace('  ', ' ')
+        line = line.split(' ')
+        line[0] = line[0].lower()
+        if (line[0] == 'endtext') and (len(line) == 1):
+            texthelp = False
+        elif texthelp:
+            helptext += orig + '\n'
+        elif line[0] == 'text':
+            texthelp = True
+        elif line[0] == 'timeout':
+            timeout = int(line[1])
+        elif line[0] == 'menu':
+            line[1] = line[1].lower()
+            if line[1] == 'title':            title = line[2]
+            elif line[1] == 'background':     background = line[2]
+            elif line[1] == 'font':           font = line[2]
+            elif line[1] == 'width':          width = int(line[2])
+            elif line[1] == 'height':         height = int(line[2])
+            elif line[1] == 'margin':         margin = int(line[2])
+            elif line[1] == 'rows':           rows = int(line[2])
+            elif line[1] == 'vshift':         vshift = int(line[2])
+            elif line[1] == 'timeoutrow':     timeoutrow = int(line[2])
+            elif line[1] == 'tabmsgrow':      tabmsgrow = int(line[2])
+            elif line[1] == 'helpmsgrow':     helpmsgrow = int(line[2])
+            elif line[1] == 'helpmsgendrow':  helpmsgendrow = int(line[2])
+            elif line[1] == 'color':
+                colour = line[4] + line[5]
+                if line[2] == 'border':
+                    colour_border = colour
+                elif line[2] == 'title':
+                    colour_title = colour
+                elif line[2] == 'sel':
+                    colour_sel = colour
+                elif line[2] == 'unsel':
+                    colour_unsel = colour
+                elif line[2] == 'help':
+                    colour_help = colour
+                elif line[2] == 'timeout_msg':
+                    colour_timeout_msg = colour
+                elif line[2] == 'timeout':
+                    colour_timeout = colour
+                elif line[2] == 'tabmag':
+                    colour_tabmsg = colour
+            elif line[1] == 'label':
+                line = orig[orig.lower().find('label') + 6:]
+                while line.startswith(' '):
+                    line = line[1:]
+                labels += line + '\n'
     except:
         break
+
+
+colour_border = ''
+colour_title = ''
+colour_sel = ''
+colour_unsel = ''
+colour_help = ''
+colour_timeout_msg = ''
+colour_timeout = ''
+colour_tabmsg = ''
+
 
 
 border = colour_border
 
 labels = (labels + '\n' * rows).split('\n')[:rows]
-labels = [(' ' + x + ' ' * width)[:width - 2] + '\033\033' for x in labels]
+labels = [(' ' + x + ' ' * width)[:width] + '\033\033' for x in labels]
 labels = ['\033' + (colour_sel if x is labels[0] else colour_unsel) + '\033' + x for x in labels]
 
-title = '\033' + colour_title + '\033' + ' ' * ((width - len(title)) // 2) + title + ' ' * width + '\033\033'
+title = (' ' * ((width - len(title)) // 2) + title + ' ' * width)[:width]
+title = '\033' + colour_title + '\033' + title + '\033\033'
 
 helpmsgendrow -= vshift
 helptext = (helptext + '\n' * (helpmsgendrow - helpmsgrow)).split('\n')[: helpmsgendrow - helpmsgrow + 1]
@@ -85,13 +147,14 @@ more.append((tabmsgrow * 10 + 1, '\033%s\033%s\033\033' % (colour_tabmsg, tabmsg
 more.append((helpmsgrow * 10 + 2, helptext))
 
 more = [(x[0] // 10, x[1]) for x in sorted(more, key = lambda x : x[0])]
-line = len(text.split('\n'))
+line = len(text.split('\n')) - vshift
 
 for seg in more:
-    if (line <= seg[0]):
+    if line <= seg[0]:
         text += '\n' * (seg[0] - line) + seg[1] + '\n'
         line = seg[0] + len(seg[1].split('\n'))
 
 text = background + '\n' + font + '\n' + '\n'.join((text + '\n' * 30).split('\n')[:30])
 
-print(text, end = '')
+print(text.replace('\033', ''), end = '')
+
