@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
 
 timeout = 0
 title = ''
@@ -155,7 +157,9 @@ for seg in more:
         text += '\n' * (seg[0] - line) + seg[1] + '\n'
         line = seg[0] + len(seg[1].split('\n'))
 
-text = background + '\n' + font + '\n' + '\n'.join((text + '\n' * 30).split('\n')[:30])
+text = background + '\n' + '\n'.join((text + '\n' * 30).split('\n')[:30])
 
 print(text.replace('\033', ''), end = '')
+
+os.system('bash -c "psf2txt <(gunzip < \'%s\') /dev/stderr 2>&1 >/dev/null | grep -v ++"' % font.replace('\'', '\'\\\'\''))
 
