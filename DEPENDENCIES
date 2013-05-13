@@ -1,0 +1,10 @@
+RUNTIME:
+	gzip: decompress fonts
+	nefa: read font files
+	sh: 1 source file is written in shell script
+	python3: 2 source files are written in Python 3
+	java-runtime: 1 source file is written in Java
+
+BUILDTIME:
+	java-environment: 1 source file is written in Java
+
