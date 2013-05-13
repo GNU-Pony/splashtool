@@ -44,7 +44,7 @@ while True:
             elif lower == 'endtext':
                 text = False
                 print(line)
-            elif text or (lower.split(' ')[0] in ('timeout', 'menu', 'label')):
+            elif text or (lower.split(' ')[0] in ('timeout', 'menu', 'label', 'font')):
                 print(line)
     except:
         break
