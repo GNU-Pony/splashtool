@@ -1,6 +1,7 @@
 RUNTIME:
 	gzip: decompress fonts
 	nefa: read font files
+	kbd: default font
 	sh: 1 source file is written in shell script
 	python3: 2 source files are written in Python 3
 	java-runtime: 1 source file is written in Java
