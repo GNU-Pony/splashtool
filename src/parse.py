@@ -128,7 +128,7 @@ title = (' ' * ((68 - len(title)) // 2) + title + ' ' * 68)[:68]
 title = '\033' + colour_title + '\033' + title + '\033\033'
 
 helpmsgendrow -= vshift
-helptext = (helptext + '\n' * (helpmsgendrow - helpmsgrow + 2)).split('\n')[: helpmsgendrow - helpmsgrow + 2]
+helptext = (helptext + '\n' * (helpmsgendrow - helpmsgrow + 1)).split('\n')[: helpmsgendrow - helpmsgrow + 1]
 helptext = ['\033' + colour_help + '\033' + (' ' * margin + x + ' ' * width)[:width] + '\033\033' for x in helptext]
 helptext = '\n'.join(helptext)
 
