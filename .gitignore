@@ -1,5 +1,6 @@
 _/
 bin/
+__pycache__/
 \#*\#
 .*
 !.git*
@@ -8,5 +9,7 @@ bin/
 *.swo
 *.png
 *.class
+*.pyc
+*.pyo
 *~
 
