@@ -20,6 +20,7 @@
 
 
 text = False
+firsttext = True
 
 while True:
     try:
@@ -40,11 +41,14 @@ while True:
             
             if lower.startswith('text '):
                 text = True
-                print(line)
+                if firsttext:
+                    print(line)
             elif lower == 'endtext':
                 text = False
-                print(line)
-            elif text or (lower.split(' ')[0] in ('timeout', 'menu', 'label', 'font')):
+                if firsttext:
+                    print(line)
+                    firsttext = False
+            elif (text and firsttext) or (lower.split(' ')[0] in ('timeout', 'menu', 'font')):
                 print(line)
     except:
         break
