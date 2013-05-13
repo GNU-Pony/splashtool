@@ -123,15 +123,16 @@ title = '\033' + colour_title + '\033' + title + '\033\033'
 
 helpmsgendrow -= vshift
 helptext = (helptext + '\n' * (helpmsgendrow - helpmsgrow)).split('\n')[: helpmsgendrow - helpmsgrow + 1]
-helptext = ['\033' + colour_help + '\033' + (x + ' ' * 86)[:86] + '\033\033' for x in helptext]
+helptext = ['\033' + colour_help + '\033' + (' ' * margin + x + ' ' * 86)[:86] + '\033\033' for x in helptext]
 helptext = '\n'.join(helptext)
 
-text = '\n' * vshift + ' ' * margin + '\033' + border + '\033┌' + '─' * width + '┐\033\033\n'
-text += ' ' * margin + '\033' + border + '\033│\033\033' + title + '\033' + border + '\033│\033\033\n'
-text += ' ' * margin + '\033' + border + '\033├' + '─' * width + '┤\033\033\n'
+menumargin = (86 - width) // 2
+text = '\n' * vshift + ' ' * menumargin + '\033' + border + '\033┌' + '─' * width + '┐\033\033\n'
+text += ' ' * menumargin + '\033' + border + '\033│\033\033' + title + '\033' + border + '\033│\033\033\n'
+text += ' ' * menumargin + '\033' + border + '\033├' + '─' * width + '┤\033\033\n'
 for label in labels:
-    text += ' ' * margin + '\033' + border + '\033│\033\033' + label + '\033' + border + '\033│\033\033\n'
-text += ' ' * margin + '\033' + border + '\033└' + '─' * width + '┘\033\033\n'
+    text += ' ' * menumargin + '\033' + border + '\033│\033\033' + label + '\033' + border + '\033│\033\033\n'
+text += ' ' * menumargin + '\033' + border + '\033└' + '─' * width + '┘\033\033\n'
 
 more = []
 
