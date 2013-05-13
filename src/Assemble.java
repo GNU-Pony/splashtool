@@ -137,7 +137,22 @@ public class Assemble
 	g.drawImage(shadow, offx + 1, offy + 1, null);
 	g.drawImage(foreground, offx, offy, null);
 	g.dispose();
+	
+	if (args[1].toLowerCase().startsWith("-w") || args[1].toLowerCase().startsWith("--w"))
+	    splash = widescreen(splash);
+	
 	ImageIO.write(splash, "png", new BufferedOutputStream(new FileOutputStream(new File(args[0]))));
+    }
+    
+    
+    private static BufferedImage widescreen(BufferedImage img)
+    {
+	BufferedImage rc = new BufferedImage(480 * 16 / 9, 480, BufferedImage.TYPE_INT_ARGB);
+	Graphics2D g = rc.createGraphics();
+	g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	g.drawImage(img, 0, 0, 480 * 16 / 9, 480, 0, 0, 640, 480, null);
+	g.dispose();
+	return rc;
     }
     
     

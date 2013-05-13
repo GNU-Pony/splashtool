@@ -23,7 +23,6 @@ in="$(realpath "$1")"
 out="$(realpath "$2")"
 d="$(dirname "$(realpath "$0")")"
 
-
 cd "$(dirname "$1")"
-cat "$in" | "$d"/trim.py | "$d"/parse.py | java -cp "$d" Assemble "$out"
+cat "$in" | "$d"/trim.py | "$d"/parse.py | java -cp "$d" Assemble "$out" "$3"
 
