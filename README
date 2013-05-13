@@ -1,0 +1,10 @@
+splashtool is a simple tool that lets you create an almost exact
+image of how your SYSLINUX bootloader configurations will reader
+if you are using vesamenu, so that you can do edits to the
+background image and the syslinux.cfg so that you do not need
+to use a virtual machine and real machine that you reboot.
+
+
+./splashtool <syslinux.cfg> <preview-output.png> [-w | --widescreen]
+
+
