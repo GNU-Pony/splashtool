@@ -46,6 +46,7 @@ Texts. A copy of the license is included in the section entitled
 
 @menu
 * Overview::                        Brief overview of @command{splashtool}.
+* Invoking::                        How to use @command{splashtool}.
 * GNU Free Documentation License::  Copying and sharing this manual.
 @end menu
 
@@ -54,7 +55,31 @@ Texts. A copy of the license is included in the section entitled
 @node Overview
 @chapter Overview
 
+@command{splashtool} is a simple tool that lets you create an almost
+exact image of how your SYSLINUX bootloader configurations will reader
+if you are using @command{vesamenu}, so that you can do edits to the
+background image and the @file{syslinux.cfg} so that you do not need
+to use a virtual machine and real machine that you reboot.
 
+
+
+@node Invoking
+@chapter Invoking
+
+The @command{splashtool} takes two manditory arguments follwed by one
+optional argument.
+
+The first argument is the @file{syslinux.cfg} file you want to create
+a preview for, the @var{background} and @var{font} specified in the
+file should be relattive to @file{syslinux.cfg}, but  @command{splashtool}
+also accepts absolute paths.
+
+The second argument is output PNG (Portable Network Graphics) file.
+
+The third argument is optional is should start with either `-w' or `--w',
+if you want to create a preview of how it will look on a widescreen
+monitor. @command{splashtool} assumes the image is 640 by 480 pixels,
+and the output for widescreen is 853 by 480 pixels.
 
 
 
