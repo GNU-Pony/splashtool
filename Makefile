@@ -13,7 +13,7 @@ doc: info
 
 info: splashtool.info.gz
 
-%.info.gz: info/%.texinfo.install
+%.info.gz: info/%.texinfo
 	makeinfo "$<"
 	gzip -9 -f "$*.info"
 
