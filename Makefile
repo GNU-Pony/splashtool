@@ -34,7 +34,7 @@ install: bin/Assemble.class splashtool.info.gz
 	install -m755 src/parse.py "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/parse.py
 	install -m755 src/trim.py "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/trim.py
 	install -m755 src/splashtool "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/splashtool
-	ln -s "$(PREFIX)$(LIBEXEC)"/splashtool "$(DESTDIR)$(PREFIX)$(BIN)"/splashtool
+	ln -sf "$(PREFIX)$(LIBEXEC)"/splashtool "$(DESTDIR)$(PREFIX)$(BIN)"/splashtool
 	install -m644 COPYING LICENSE '$(DESTDIR)$(LICENSES)/$(PKGNAME)'
 	install -m644 splashtool.info.gz "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info.gz"
 

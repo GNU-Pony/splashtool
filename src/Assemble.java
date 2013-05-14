@@ -148,10 +148,24 @@ public class Assemble
     private static BufferedImage widescreen(BufferedImage img)
     {
 	BufferedImage rc = new BufferedImage(480 * 16 / 9, 480, BufferedImage.TYPE_INT_ARGB);
-	Graphics2D g = rc.createGraphics();
-	g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	g.drawImage(img, 0, 0, 480 * 16 / 9, 480, 0, 0, 640, 480, null);
-	g.dispose();
+	for (int y = 0; y < 480; y++)
+	    for (int x = 0, e = 0; x < 640; x++)
+	    {
+		rc.setRGB(x + e, y, img.getRGB(x, y));
+		if (x % 3 == 2)
+		    if (x == 639)
+			rc.setRGB(x + ++e, y, img.getRGB(x, y));
+		    else
+		    {
+			int argb1 = img.getRGB(x, y);
+			int argb2 = img.getRGB(x + 1, y);
+			int a = (argb1 >>> 24) + (argb2 >>> 24);
+			int r = ((argb1 >> 16) & 255) + ((argb2 >> 16) & 255);
+			int g = ((argb1 >> 8) & 255) + ((argb2 >> 8) & 255);
+			int b = (argb1 & 255) + (argb2 & 255);
+			rc.setRGB(x + ++e, y, ((a >> 1) << 24) | ((r >> 1) << 16) | ((g >> 1) << 8) | (b >> 1));
+		    }
+	    }
 	return rc;
     }
     
