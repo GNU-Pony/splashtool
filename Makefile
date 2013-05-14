@@ -1,7 +1,7 @@
 PREFIX = /usr
 BIN = /bin
-LIBEXEC = /libexec/splashtool
 PKGNAME = splashtool
+LIBEXEC = /libexec/$(PKGNAME)
 DATA = /share
 LICENSES = $(PREFIX)$(DATA)/licenses
 
