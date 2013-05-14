@@ -11,5 +11,22 @@ __pycache__/
 *.class
 *.pyc
 *.pyo
+*.gz
+*.bz2
+*.xz
 *~
+splashtool.aux
+splashtool.cp
+splashtool.fn
+splashtool.ky
+splashtool.log
+splashtool.pdf
+splashtool.pg
+splashtool.toc
+splashtool.tp
+splashtool.vr
+splashtool.info
+splashtool.ps
+splashtool.pdf
+splashtool.dvi
 
