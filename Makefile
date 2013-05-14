@@ -26,27 +26,27 @@ bin/Assemble.class: src/Assemble.java
 
 
 install: bin/Assemble.class splashtool.info.gz
-	install -dm755 "$(DESTDIR)$(BIN)"
-	install -dm755 "$(DESTDIR)$(LIBEXEC)"
-	install -dm755 "$(DESTDIR)$(DATA)/info"
+	install -dm755 "$(DESTDIR)$(PREFIX)$(BIN)"
+	install -dm755 "$(DESTDIR)$(PREFIX)$(LIBEXEC)"
+	install -dm755 "$(DESTDIR)$(PREFIX)$(DATA)/info"
 	install -dm755 '$(DESTDIR)$(LICENSES)/$(PKGNAME)'
-	install -m644 bin/Assemble.class "$(DESTDIR)$(LIBEXEC)"/Assemble.class
-	install -m755 src/parse.py "$(DESTDIR)$(LIBEXEC)"/parse.py
-	install -m755 src/trim.py "$(DESTDIR)$(LIBEXEC)"/trim.py
-	install -m755 src/splashtool "$(DESTDIR)$(LIBEXEC)"/splashtool
-	ln -s "$(LIBEXEC)"/splashtool "$(DESTDIR)$(BIN)"/splashtool
+	install -m644 bin/Assemble.class "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/Assemble.class
+	install -m755 src/parse.py "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/parse.py
+	install -m755 src/trim.py "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/trim.py
+	install -m755 src/splashtool "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/splashtool
+	ln -s "$(LIBEXEC)"/splashtool "$(DESTDIR)$(PREFIX)$(BIN)"/splashtool
 	install -m644 COPYING LICENSE '$(DESTDIR)$(LICENSES)/$(PKGNAME)'
 	install -m644 splashtool.info.gz "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info.gz"
 
 uninstall:
-	rm -- "$(DESTDIR)$(BIN)"/splashtool
-	rm -- "$(DESTDIR)$(LIBEXEC)"/Assemble.class
-	rm -- "$(DESTDIR)$(LIBEXEC)"/parse.py
-	rm -- "$(DESTDIR)$(LIBEXEC)"/trim.py
-	rm -- "$(DESTDIR)$(LIBEXEC)"/splashtool
-	-rmdir -- "$(DESTDIR)$(LIBEXEC)"
-	rm -- '$(DESTDIR)$(LICENSES)/$(PKGNAME)/COPYING'
-	rm -- '$(DESTDIR)$(LICENSES)/$(PKGNAME)/LICENSE'
+	rm -- "$(DESTDIR)$(PREFIX)$(BIN)"/splashtool
+	rm -- "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/Assemble.class
+	rm -- "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/parse.py
+	rm -- "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/trim.py
+	rm -- "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/splashtool
+	-rmdir -- "$(DESTDIR)$(PREFIX)$(LIBEXEC)"
+	rm -- '$(DESTDIR)$(PREFIX)$(LICENSES)/$(PKGNAME)/COPYING'
+	rm -- '$(DESTDIR)$(PREFIX)$(LICENSES)/$(PKGNAME)/LICENSE'
 	rmdir -- '$(DESTDIR)$(LICENSES)/$(PKGNAME)'
 	rm -- '$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info.gz'
 
