@@ -34,7 +34,7 @@ install: bin/Assemble.class splashtool.info.gz
 	install -m755 src/parse.py "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/parse.py
 	install -m755 src/trim.py "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/trim.py
 	install -m755 src/splashtool "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/splashtool
-	ln -s "$(LIBEXEC)"/splashtool "$(DESTDIR)$(PREFIX)$(BIN)"/splashtool
+	ln -s "$(PREFIX)$(LIBEXEC)"/splashtool "$(DESTDIR)$(PREFIX)$(BIN)"/splashtool
 	install -m644 COPYING LICENSE '$(DESTDIR)$(LICENSES)/$(PKGNAME)'
 	install -m644 splashtool.info.gz "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info.gz"
 
@@ -45,8 +45,8 @@ uninstall:
 	rm -- "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/trim.py
 	rm -- "$(DESTDIR)$(PREFIX)$(LIBEXEC)"/splashtool
 	-rmdir -- "$(DESTDIR)$(PREFIX)$(LIBEXEC)"
-	rm -- '$(DESTDIR)$(PREFIX)$(LICENSES)/$(PKGNAME)/COPYING'
-	rm -- '$(DESTDIR)$(PREFIX)$(LICENSES)/$(PKGNAME)/LICENSE'
+	rm -- '$(DESTDIR)$(LICENSES)/$(PKGNAME)/COPYING'
+	rm -- '$(DESTDIR)$(LICENSES)/$(PKGNAME)/LICENSE'
 	rmdir -- '$(DESTDIR)$(LICENSES)/$(PKGNAME)'
 	rm -- '$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info.gz'
 
