@@ -81,6 +81,8 @@ if you want to create a preview of how it will look on a widescreen
 monitor. @command{splashtool} assumes the image is 640 by 480 pixels,
 and the output for widescreen is 853 by 480 pixels.
 
+No other option should be used, not even `--'.
+
 
 
 @node GNU Free Documentation License
