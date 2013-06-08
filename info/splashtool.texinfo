@@ -10,6 +10,12 @@
 @c %**end of header
 
 
+@dircategory Multimedia
+@direntry
+* splashtool: (splashtool).          A simple tool for creating SYSLINUX splashes without fuss
+@end direntry
+
+
 @copying
 Copyright @copyright{} 2013 Mattias Andrée
 
