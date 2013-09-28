@@ -22,7 +22,7 @@ classes: bin/Assemble.class
 
 bin/Assemble.class: src/Assemble.java
 	mkdir -p bin
-	javac -cp src -s src -d bin src/Assemble.java
+	javac -cp src -s src -d bin -encoding UTF-8 src/Assemble.java
 
 
 install: bin/Assemble.class splashtool.info.gz
