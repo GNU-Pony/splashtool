@@ -82,12 +82,12 @@ also accepts absolute paths.
 
 The second argument is output PNG (Portable Network Graphics) file.
 
-The third argument is optional is should start with either `-w' or `--w',
-if you want to create a preview of how it will look on a widescreen
-monitor. @command{splashtool} assumes the image is 640 by 480 pixels,
-and the output for widescreen is 853 by 480 pixels.
+The third argument is optional is should start with either @option{-w}
+or @option{--w}, if you want to create a preview of how it will look
+on a widescreen monitor. @command{splashtool} assumes the image is 640
+by 480 pixels, and the output for widescreen is 853 by 480 pixels.
 
-No other option should be used, not even `--'.
+No other option should be used, not even @option{--}.
 
 
 
