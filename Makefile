@@ -80,7 +80,6 @@ install-command: bin/Assemble.class
 	install -dm755 "$(DESTDIR)$(LIBEXECDIR)"
 	install -m644 bin/Assemble.class "$(DESTDIR)$(LIBEXECDIR)"/Assemble.class
 	install -m755 src/parse.py "$(DESTDIR)$(LIBEXECDIR)"/parse.py
-	install -m755 src/trim.py "$(DESTDIR)$(LIBEXECDIR)"/trim.py
 	install -m755 src/splashtool "$(DESTDIR)$(LIBEXECDIR)"/splashtool
 	ln -sf "$(LIBEXECDIR)"/splashtool "$(DESTDIR)$(BINDIR)"/splashtool
 
@@ -117,7 +116,6 @@ uninstall:
 	-rm -- "$(DESTDIR)$(BINDIR)"/splashtool
 	-rm -- "$(DESTDIR)$(LIBEXECDIR)"/Assemble.class
 	-rm -- "$(DESTDIR)$(LIBEXECDIR)"/parse.py
-	-rm -- "$(DESTDIR)$(LIBEXECDIR)"/trim.py
 	-rm -- "$(DESTDIR)$(LIBEXECDIR)"/splashtool
 	-rmdir -- "$(DESTDIR)$(LIBEXECDIR)"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/COPYING"
