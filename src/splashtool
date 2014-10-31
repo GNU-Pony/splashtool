@@ -26,12 +26,12 @@ d="$(dirname "$(realpath "$0")")"
 trim ()
 {
     sed -e 's/\t/ /g' | sed -e '/^[ \t]*\(#\|$\)/d' -e 's/ #.*$//' -e 's/^ *//' -e 's/ *$//' |
-	awk ' BEGIN { text = 0; }
-              { t=tolower($1);
-                if (t=="text") text+=1;
-                if (t=="timeout" || t=="menu" || t=="font" || text==1) print $LINE;
-                if (t=="endtext") text+=1;
-              }'
+	awk 'BEGIN { text = 0; }
+             { t=tolower($1);
+               if (t=="text") text+=1;
+               if (t=="timeout" || t=="menu" || t=="font" || text==1) print $LINE;
+               if (t=="endtext") text+=1;
+             }'
 }
 
 cd "$(dirname "$1")"
