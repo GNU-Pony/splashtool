@@ -24,32 +24,19 @@ firsttext = True
 
 while True:
     try:
-        line = input().replace('\t', ' ')
+        line = input()
         lower = line.lower()
-        if line.replace(' ', '').startswith('#') or (len(line.replace(' ', '')) == 0):
-            continue
-        else:
-            if ' # ' in line:
-                line = line[:line.find(' # ')]
-                lower = lower[:lower.find(' # ')]
-            while line.startswith(' '):
-                line = line[1:]
-                lower = lower[1:]
-            while line.endswith(' '):
-                line = line[:-1]
-                lower = lower[:-1]
-            
-            if lower.startswith('text '):
-                text = True
-                if firsttext:
-                    print(line)
-            elif lower == 'endtext':
-                text = False
-                if firsttext:
-                    print(line)
-                    firsttext = False
-            elif (text and firsttext) or (lower.split(' ')[0] in ('timeout', 'menu', 'font')):
+        if lower.startswith('text '):
+            text = True
+            if firsttext:
                 print(line)
+        elif lower == 'endtext':
+            text = False
+            if firsttext:
+                print(line)
+                firsttext = False
+        elif (text and firsttext) or (lower.split(' ')[0] in ('timeout', 'menu', 'font')):
+            print(line)
     except:
         break
 

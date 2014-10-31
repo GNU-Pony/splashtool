@@ -3,8 +3,9 @@ RUNTIME:
 	nafe: read font files
 	kbd: default font
 	sh: 1 source file is written in shell script
-	python3: 2 source files are written in Python 3
+	python3: 1 source files are written in Python 3
 	java-runtime: 1 source file is written in Java
+	awk
 
 BUILDTIME:
 	java-environment: 1 source file is written in Java

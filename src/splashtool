@@ -18,11 +18,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
 in="$(realpath "$1")"
 out="$(realpath "$2")"
 d="$(dirname "$(realpath "$0")")"
 
+# Remove all information we do not need.
+trim ()
+{
+    sed -e 's/\t/ /g' | sed -e '/^[ \t]*\(#\|$\)/d' -e 's/ #.*$//' -e 's/^ *//' -e 's/ *$//' |
+	awk ' BEGIN { text = 0; }
+              { t=tolower($1);
+                if (t=="text") text+=1;
+                if (t=="timeout" || t=="menu" || t=="font" || text==1) print $LINE;
+                if (t=="endtext") text+=1;
+              }'
+}
+
 cd "$(dirname "$1")"
-cat "$in" | "$d"/trim.py | "$d"/parse.py | java -cp "$d" Assemble "$out" "$3"
+trim < "$in" | "$d"/parse.py | java -cp "$d" Assemble "$out" "$3"
 
