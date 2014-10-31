@@ -6,6 +6,8 @@ RUNTIME:
 	python3: 1 source files are written in Python 3
 	java-runtime: 1 source file is written in Java
 	awk
+	grep
+	bash
 
 BUILDTIME:
 	java-environment: 1 source file is written in Java
