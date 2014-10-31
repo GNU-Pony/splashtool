@@ -4,6 +4,7 @@ __pycache__/
 \#*\#
 .*
 !.git*
+*
 *.bak
 *.swp
 *.swo
@@ -14,6 +15,8 @@ __pycache__/
 *.gz
 *.bz2
 *.xz
-*~
-splashtool.*
-!splashtool.texinfo
+*.info
+*.pdf
+*.dvi
+*.ps
+
