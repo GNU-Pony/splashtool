@@ -25,6 +25,16 @@ d="$(dirname "$(realpath "$0")")"
 cd "$(dirname "$1")"
 
 
+make_image ()
+{
+    if [ -z "${debug}" ]; then
+	java -cp "$d" Assemble "$out" "$3"
+    else
+	cat
+    fi
+}
+
+
 # Get the description text do display.
 get_text ()
 {
@@ -195,7 +205,7 @@ segs ()
     done
     echo "${text}"
 }
-text="$(echo "${more}" | segs | ltrunc 30)"
+text="$(echo "${more}" | segs | ltrunc 29)"
 
 if [ -z "${debug}" ]; then
     echo "${text}"
@@ -210,5 +220,5 @@ else
     echo "${text}" | sed -e 's/\x1b\([^\x1b]*\)\x1b/\x1b[\1m/g'
 fi
 
-) # | java -cp "$d" Assemble "$out" "$3"
+) | make_image
 
