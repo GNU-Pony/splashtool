@@ -188,7 +188,7 @@ segs ()
     mod=0
     while read -r seg; do
 	current=$(echo "${seg}" | cut -d ' ' -f 1)
-	index=$(( ${current} / 10 ))
+	index=$(( ${current} / 10 - 1 ))
 	seg="$(echo "${seg}" | sed -e 's/^[^ ]* //')"
 	if [ ${last} = ${current} ]; then
 	    text="$(echo "${text}" ; echo "${seg}")"
