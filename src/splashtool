@@ -111,7 +111,7 @@ ctrunc ()
 # Add columns the left side
 padl ()
 {
-    while read -r l; do printf "%${1}s%s\n" "" "${l}"; done
+    sed -e "s/^/$(printf "%${1}s" "")/"
 }
 
 # Colourise text
