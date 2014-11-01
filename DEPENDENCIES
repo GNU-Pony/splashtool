@@ -2,13 +2,12 @@ RUNTIME:
 	gzip: decompress fonts
 	nafe: read font files
 	kbd: default font
-	sh: 1 source file is written in shell script
-	python3: 1 source files are written in Python 3
-	java-runtime: 1 source file is written in Java
+	bash
+	python3
+	java-runtime
 	awk
 	grep
-	bash
 
-BUILDTIME:
-	java-environment: 1 source file is written in Java
+BUILD:
+	java-environment
 
