@@ -2,12 +2,10 @@ RUNTIME:
 	gzip: decompress fonts
 	nafe: read font files
 	kbd: default font
+	imagemagick: output to png
 	bash
 	python3
-	java-runtime
 	awk
 	grep
-
-BUILD:
-	java-environment
+	sed
 
