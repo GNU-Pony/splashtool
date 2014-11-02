@@ -19,7 +19,10 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-def join(fb, bg, alpha):
+import sys
+
+
+def join(fg, bg, alpha):
     t = alpha * linear(fg) + (255 - alpha) * linear(bg)
     t /= 255
     if t <= 0.00304:
@@ -32,6 +35,45 @@ def linear(c):
     if c <= 10:
         return c / (255 * 12.92)
     return ((c + 14.025) / 269.025) ** 2.4
+
+def subpixels(p):
+    return ((p >> 24) & 255, (p >> 16) & 255, (p >> 8) & 255, (p >> 0) & 255)
+
+def buffer_join(layer, base, offx, offy):
+    for x in range(len(layer)):
+        if x + offx >= len(base):
+            break
+        layer_column = layer[x]
+        base_column = base[x + offx]
+        for y in range(len(column)):
+            if y + offy >= len(base_column):
+                break
+            (la, lr, lg, lb) = subpixels(layer_column[y])
+            (ba, br, bg, bb) = subpixels(base_column[y + offy])
+            r = join(lr, br, la)
+            g = join(lg, bg, la)
+            b = join(lb, bb, la)
+            base_column[y + offy] = (255 << 24) | (r << 16) | (g << 8) | b
+
+def widescreen(img):
+    rc = [[0] * (480 * 16 // 9) for i in range(480)]
+    for y in range(480):
+        e = 0
+        for x in range(640):
+            rc[x + e][y] = img[x][y]
+            if x % 3 == 2:
+                argb = img[x][y]
+                if x < 639:
+                    (a1, r1, g1, b1) = subpixels(argb)
+                    (a2, r2, g2, b2) = subpixels(img[x + x1][y])
+                    a = ((a1 + a2) // 2) << 24
+                    r = ((r1 + r2) // 2) << 16
+                    g = ((g1 + g2) // 2) << 8
+                    b = ((b1 + b2) // 2) << 0
+                    argb = a | r | g | b
+                e += 1
+                rc[x + e][y] = argb
+    return rc
 
 # Read image data.
 splash = input()
@@ -98,15 +140,33 @@ for y in range(height):
                     xo = (char[yi] >> xi) & 1
                     t = offx + x * charx + xi + xo
                     rgb = splash[639 if t > 639 else t][offy + y * chary + yi]
-                    r, g, b = (rgb >> 16) & 255, (rgb >> 8) & 255, (rgb >> 0) & 255
+                    _a, r, g, b = subpixels(rgb)
                     if xo == 1:
                         shadow[x * charx + xi][y * chary + yi] = 128 << 24
                     (c_, i_) = (fore, foreground) if xo == 1 else (back, background)
-                    a = c_ >> 24
-                    r = join((c_ >> 16) & 255, r, a)
-                    g = join((c_ >> 8) & 255, g, a)
-                    b = join((c_ >> 0) & 255, b, a)
+                    ca, cr, cg, cb = subpixels(c_)
+                    r = join(cr, r, ca)
+                    g = join(cg, g, ca)
+                    b = join(cb, b, ca)
                     rgb = (255 << 24) | (r << 16) | (g << 8) | b
                     i_[x * charx + xi][y * chary + yi] = rgb
             x += 1
 
+# Apply layers.
+buffer_join(background, splash, offx, offy)
+buffer_join(shadow, splash, offx + 1, offy + 1)
+buffer_join(foreground, splash, offx, offy)
+
+# Make widescreen preview.
+if sys.argv[2].lower().startswith('-w') or sys.argv[2].lower().startswith('--w'):
+    splash = widescreen(splash)
+
+# Print image.
+width, height = len(splash), len(splash[0])
+print('P3')
+print('%i %i' % (width, height))
+print('255')
+trans = ['%i' % i for i in range(256)]
+for y in range(height):
+    for x in range(width):
+        print(trans[splash[x][y]])
