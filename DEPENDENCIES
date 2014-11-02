@@ -1,4 +1,5 @@
-RUNTIME:
+RUNTIME DEPENDENCIES:
+
 	gzip: decompress fonts
 	nafe: read font files
 	kbd: default font
@@ -8,4 +9,18 @@ RUNTIME:
 	awk
 	grep
 	sed
+	coreutils
+
+
+BUILD DEPENDENCIES:
+
+	make
+	coreutils
+	sed
+
+
+INSTALL DEPENDENCIES:
+
+	make
+	coreutils
 

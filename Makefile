@@ -5,6 +5,8 @@
 
 
 PREFIX = /usr
+KBD_PREFIX = $(PREFIX)
+ENV_PREFIX = $(PREFIX)
 BIN = /bin
 LIBEXEC = /libexec/$(PKGNAME)
 DATA = /share
@@ -15,11 +17,12 @@ DOCDIR = $(DATADIR)/doc
 INFODIR = $(DATADIR)/info
 LICENSEDIR = $(DATADIR)/licenses
 SYSCONFDIR = /etc
-PROCDIR = /proc
 DEVDIR = /dev
 TMPDIR = /tmp
 
 PKGNAME = splashtool
+
+PY_SHEBANG = $(ENV_PREFIX)$(BIN)/env python3
 
 
 
@@ -30,7 +33,23 @@ default: command info
 all: command doc
 
 .PHONY: command
-command:
+command: bin/splashtool bin/assemble
+
+bin/splashtool: src/splashtool
+	@mkdir -p bin
+	cp $< $@
+	sed -i 's:/dev/:$(DEVDIR)/:g' $@
+	sed -i 's:/usr/share/kbd/:$(KBD_PREFIX)$(DATA)/kbd/:g' $@
+	sed -i 's:/tmp/:$(TMPDIR)/:g' $@
+
+bin/assemble: src/assemble
+	@mkdir -p bin
+	echo '#!$(PY_SHEBANG)' > $@
+	sed 1d < $< >> $@
+	sed -i 's:/dev/:$(DEVDIR)/:g' $@
+	sed -i 's:/usr/share/kbd/:$(KBD_PREFIX)$(DATA)/kbd/:g' $@
+	sed -i 's:/tmp/:$(TMPDIR)/:g' $@
+	chmod a+x $@
 
 .PHONY: doc
 doc: info pdf ps dvi
@@ -72,12 +91,12 @@ install-all: install-base install-doc
 install-base: install-command install-license
 
 .PHONY: install-command
-install-command:
+install-command: bin/assemble bin/splashtool
 	install -dm755 "$(DESTDIR)$(BINDIR)"
 	install -dm755 "$(DESTDIR)$(LIBEXECDIR)"
-	install -m755 src/assemble "$(DESTDIR)$(LIBEXECDIR)"/assemble
-	install -m755 src/splashtool "$(DESTDIR)$(LIBEXECDIR)"/splashtool
-	ln -sf "$(LIBEXECDIR)"/splashtool "$(DESTDIR)$(BINDIR)"/splashtool
+	install -m755 bin/assemble "$(DESTDIR)$(LIBEXECDIR)"/assemble
+	install -m755 bin/splashtool "$(DESTDIR)$(LIBEXECDIR)"/splashtool
+	ln -sfr "$(LIBEXECDIR)"/splashtool "$(DESTDIR)$(BINDIR)"/splashtool
 
 .PHONY: install-license
 install-license:
