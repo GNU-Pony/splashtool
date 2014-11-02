@@ -18,25 +18,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-in="$(realpath "$1")"
-out="$(realpath "$2")"
-d="$(dirname "$(realpath "$0")")"
+in="$(realpath "${1}")"
+out="$(realpath "${2}")"
+d="$(dirname "$(realpath "${0}")")"
 
-cd "$(dirname "$1")"
+cd "$(dirname "${1}")"
 
 
 # Create an images from the generated data.
 make_image ()
 {
     if [ -z "${debug}" ]; then
-	java -cp "$d" Assemble "$out" "$3"
+	"${d}/assemble" "${out}" "${3}" | convert /dev/stdin "${out}"
     else
 	cat
     fi
 }
 
 
-# Get the description text do display.
+# Get the description text to display.
 get_text ()
 {
     awk 'BEGIN { text = 0; }

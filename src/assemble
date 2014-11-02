@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+# -*- python -*-
+'''
+splashtool – A simple tool for creating SYSLINUX splashes without fuss
+
+Copyright © 2013, 2014  Mattias Andrée (maandree@member.fsf.org)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
+def join(fb, bg, alpha):
+    t = alpha * linear(fg) + (255 - alpha) * linear(bg)
+    t /= 255
+    if t <= 0.00304:
+        t *= 12.92
+    else:
+        t = 1.055 * t ** (1 / 2.4) - 0.055
+    return int(255 * t + 0.5)
+
+def linear(c):
+    if c <= 10:
+        return c / (255 * 12.92)
+    return ((c + 14.025) / 269.025) ** 2.4
+
+# Read image data.
+splash = input()
+width  = int(input())
+height = int(input())
+rows   = [input() for i in range(height)]
+
+# Read font data.
+chars = int(input())
+charx = int(input())
+chary = int(input())
+charmap = [[0] * chary for i in range(chars)]
+for i in range(chars):
+    for y in range(chary):
+        line = input()
+        charmap[i][y] = sum((0 if line[x] == ' ' else 1) << x for x in range(charx))
+
+# The overlay should be centered on the background.
+offx = (640 - width * charx) // 2
+offy = (480 - height * chary) // 2
+
+# Buffers for layers.
+# TODO splash = ... (splash)
+background = [[0] * (height * chary) for i in range(width * charx)]
+foreground = [[0] * (height * chary) for i in range(width * charx)]
+shadow     = [[0] * (height * chary) for i in range(width * charx)]
+
+# Colours.
+fore = 0
+back = 0
+foreback = 0
+
+# Fill largers.
+for y in range(height):
+    x = 0
+    row = rows[y]
+    escape = False
+    for i in range(len(row)):
+        c = row[i]
+        if c == '\033':
+            fore = foreback >> 32
+            back = foreback & ((1 << 32) - 1)
+            escape = not escape
+            foreback = 0
+        elif escape:
+            if c == '#':
+                continue
+            foreback <<= 4
+            foreback |= (ord(c) & 15) + (0 if c <= '9' else 9)
+            foreback &= (1 << 64) - 1
+        else:
+            ci = ord(c) % chars
+            if   c == '┌':  ci = 218
+            elif c == '─':  ci = 196
+            elif c == '┐':  ci = 191
+            elif c == '│':  ci = 179
+            elif c == '├':  ci = 195
+            elif c == '┤':  ci = 180
+            elif c == '└':  ci = 192
+            elif c == '┘':  ci = 217
+            char = charmap[ci]
+            for yi in range(chary):
+                for xi in range(charx):
+                    xo = (char[yi] >> xi) & 1
+                    t = offx + x * charx + xi + xo
+                    rgb = splash[639 if t > 639 else t][offy + y * chary + yi]
+                    r, g, b = (rgb >> 16) & 255, (rgb >> 8) & 255, (rgb >> 0) & 255
+                    if xo == 1:
+                        shadow[x * charx + xi][y * chary + yi] = 128 << 24
+                    (c_, i_) = (fore, foreground) if xo == 1 else (back, background)
+                    a = c_ >> 24
+                    r = join((c_ >> 16) & 255, r, a)
+                    g = join((c_ >> 8) & 255, g, a)
+                    b = join((c_ >> 0) & 255, b, a)
+                    rgb = (255 << 24) | (r << 16) | (g << 8) | b
+                    i_[x * charx + xi][y * chary + yi] = rgb
+            x += 1
+
