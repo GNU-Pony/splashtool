@@ -10,12 +10,8 @@ __pycache__/
 *.swp
 *.swo
 *.png
-*.class
 *.pyc
 *.pyo
-*.gz
-*.bz2
-*.xz
 *.info
 *.pdf
 *.dvi
