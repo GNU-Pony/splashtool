@@ -20,6 +20,7 @@
 
 in="$(realpath "${1}")"
 out="$(realpath "${2}")"
+export wide="${3}"
 d="$(dirname "$(realpath "${0}")")"
 
 
@@ -31,7 +32,7 @@ cd "$(dirname "${1}")"
 make_image ()
 {
     if [ -z "${debug}" ]; then
-	"${d}/assemble" "${out}" "${3}" | convert /dev/stdin "${out}"
+	"${d}/assemble" "${out}" "${wide}" | convert /dev/stdin "${out}"
     else
 	cat
     fi
@@ -146,6 +147,7 @@ export border="$(csel color_border)"
 # Convert background image to binary portable anymap.
 background_file="$(mktemp /tmp/.tmp.XXXXXXXXXXXXXXXXXXXX.ppm)"
 convert "$(sel background)" "${background_file}"
+sed -i 1,3d "${background_file}"
 
 # Make image.
 (

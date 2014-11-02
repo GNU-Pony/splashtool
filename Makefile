@@ -22,7 +22,19 @@ TMPDIR = /tmp
 
 PKGNAME = splashtool
 
-PY_SHEBANG = $(ENV_PREFIX)$(BIN)/env python3
+WARN = -Wall -Wextra -pedantic -Wformat=2 -Winit-self -Wmissing-include-dirs   \
+       -Wfloat-equal -Wshadow -Wmissing-prototypes -Wmissing-declarations      \
+       -Wredundant-decls -Wnested-externs -Winline -Wno-variadic-macros        \
+       -Wswitch-default -Wconversion -Wcast-align -Wstrict-overflow            \
+       -Wdeclaration-after-statement -Wundef -Wcast-qual -Wbad-function-cast   \
+       -Wwrite-strings -Waggregate-return -Wpacked -Wstrict-prototypes         \
+       -Wold-style-definition  -Wdouble-promotion -Wtrampolines                \
+       -Wsign-conversion -Wsync-nand -Wlogical-op                              \
+       -Wvector-operation-performance -Wsuggest-attribute=const                \
+       -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure                   \
+       -Wsuggest-attribute=format -Wnormalized=nfkc -Wunsafe-loop-optimizations
+
+FLAGS = -std=gnu99 -Ofast -lm $(WARN)
 
 
 
@@ -42,14 +54,13 @@ bin/splashtool: src/splashtool
 	sed -i 's:/usr/share/kbd/:$(KBD_PREFIX)$(DATA)/kbd/:g' $@
 	sed -i 's:/tmp/:$(TMPDIR)/:g' $@
 
-bin/assemble: src/assemble
+bin/assemble: obj/assemble.o
 	@mkdir -p bin
-	echo '#!$(PY_SHEBANG)' > $@
-	sed 1d < $< >> $@
-	sed -i 's:/dev/:$(DEVDIR)/:g' $@
-	sed -i 's:/usr/share/kbd/:$(KBD_PREFIX)$(DATA)/kbd/:g' $@
-	sed -i 's:/tmp/:$(TMPDIR)/:g' $@
-	chmod a+x $@
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $<
+
+obj/assemble.o: src/assemble.c
+	@mkdir -p obj
+	$(CC) $(FLAGS) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 .PHONY: doc
 doc: info pdf ps dvi
@@ -96,7 +107,7 @@ install-command: bin/assemble bin/splashtool
 	install -dm755 "$(DESTDIR)$(LIBEXECDIR)"
 	install -m755 bin/assemble "$(DESTDIR)$(LIBEXECDIR)"/assemble
 	install -m755 bin/splashtool "$(DESTDIR)$(LIBEXECDIR)"/splashtool
-	ln -sfr "$(LIBEXECDIR)"/splashtool "$(DESTDIR)$(BINDIR)"/splashtool
+	ln -sfr "$(DESTDIR)$(LIBEXECDIR)"/splashtool "$(DESTDIR)$(BINDIR)"/splashtool
 
 .PHONY: install-license
 install-license:

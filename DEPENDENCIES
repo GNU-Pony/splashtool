@@ -5,11 +5,11 @@ RUNTIME DEPENDENCIES:
 	kbd: default font
 	imagemagick: output to png
 	bash
-	python3
 	awk
 	grep
 	sed
 	coreutils
+	glibc
 
 
 BUILD DEPENDENCIES:
@@ -17,6 +17,8 @@ BUILD DEPENDENCIES:
 	make
 	coreutils
 	sed
+	glibc
+	gcc
 
 
 INSTALL DEPENDENCIES:
