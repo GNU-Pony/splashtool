@@ -170,3 +170,4 @@ trans = ['%i' % i for i in range(256)]
 for y in range(height):
     for x in range(width):
         print(trans[splash[x][y]])
+
