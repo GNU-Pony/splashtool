@@ -30,10 +30,7 @@ default: command info
 all: command doc
 
 .PHONY: command
-command: bin/Assemble.class
-bin/Assemble.class: src/Assemble.java
-	mkdir -p bin
-	javac -cp src -s src -d bin -encoding UTF-8 src/Assemble.java
+command:
 
 .PHONY: doc
 doc: info pdf ps dvi
@@ -75,11 +72,10 @@ install-all: install-base install-doc
 install-base: install-command install-license
 
 .PHONY: install-command
-install-command: bin/Assemble.class
+install-command:
 	install -dm755 "$(DESTDIR)$(BINDIR)"
 	install -dm755 "$(DESTDIR)$(LIBEXECDIR)"
-	install -m644 bin/Assemble.class "$(DESTDIR)$(LIBEXECDIR)"/Assemble.class
-	install -m755 src/parse.py "$(DESTDIR)$(LIBEXECDIR)"/parse.py
+	install -m755 src/assemble "$(DESTDIR)$(LIBEXECDIR)"/assemble
 	install -m755 src/splashtool "$(DESTDIR)$(LIBEXECDIR)"/splashtool
 	ln -sf "$(LIBEXECDIR)"/splashtool "$(DESTDIR)$(BINDIR)"/splashtool
 
@@ -114,8 +110,7 @@ install-dvi: splashtool.dvi
 
 uninstall:
 	-rm -- "$(DESTDIR)$(BINDIR)"/splashtool
-	-rm -- "$(DESTDIR)$(LIBEXECDIR)"/Assemble.class
-	-rm -- "$(DESTDIR)$(LIBEXECDIR)"/parse.py
+	-rm -- "$(DESTDIR)$(LIBEXECDIR)"/assemble
 	-rm -- "$(DESTDIR)$(LIBEXECDIR)"/splashtool
 	-rmdir -- "$(DESTDIR)$(LIBEXECDIR)"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/COPYING"
