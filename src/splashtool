@@ -22,6 +22,8 @@ in="$(realpath "${1}")"
 out="$(realpath "${2}")"
 d="$(dirname "$(realpath "${0}")")"
 
+
+# The the directory of the config file so that relative paths are resolved as intended.
 cd "$(dirname "${1}")"
 
 
@@ -34,7 +36,6 @@ make_image ()
 	cat
     fi
 }
-
 
 # Get the description text to display.
 get_text ()
@@ -142,10 +143,14 @@ export helpmsgrow="$(sel helpmsgrow)"
 export menumargin=$(( (${width} - 70) / 2 ))
 export border="$(csel color_border)"
 
+# Convert background image to binary portable anymap.
+background_file="$(mktemp /tmp/.tmp.XXXXXXXXXXXXXXXXXXXX.ppm)"
+convert "$(sel background)" "${background_file}"
+
 # Make image.
 (
 # Print background image, screen width (columns), and screen heights (lines)
-echo "$(sel background)"
+echo "${background_file}"
 echo "${width}"
 echo "29"
 
@@ -245,4 +250,7 @@ else
     echo "${text}" | sed -e 's/\x1b\([^\x1b]*\)\x1b/\x1b[\1m/g'
 fi
 ) | make_image
+
+# Remove temporarily converted background image.
+unlink "${background_file}"
 

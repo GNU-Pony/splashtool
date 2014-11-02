@@ -45,7 +45,7 @@ def buffer_join(layer, base, offx, offy):
             break
         layer_column = layer[x]
         base_column = base[x + offx]
-        for y in range(len(column)):
+        for y in range(len(layer_column)):
             if y + offy >= len(base_column):
                 break
             (la, lr, lg, lb) = subpixels(layer_column[y])
@@ -75,6 +75,36 @@ def widescreen(img):
                 rc[x + e][y] = argb
     return rc
 
+def load_p6(filename):
+    with open(filename, 'rb') as file:
+        data = file.read()
+    text = data.decode('utf-8', 'replace')
+    text = text[:100].replace('\t', ' ').replace('\r', ' ').replace('\n', ' ')
+    text = [word for word in text.split(' ') if not word == '']
+    width, height = int(text[1]), int(text[2])
+    data = list(data)
+    lines = 0
+    while lines < 3:
+        if data[0] == ord('\n'):
+            lines += 1
+        data[:] = data[1:]
+    img = [None] * height
+    def parse_row(row):
+        rc = [0] * (len(row) // 3)
+        for i in range(len(rc)):
+            rc[i] += row[i * 3 + 0] << 16
+            rc[i] += row[i * 3 + 1] << 8
+            rc[i] += row[i * 3 + 2] << 0
+        return rc
+    for y in range(height):
+       img[y] = parse_row(data[:width * 3])
+       data[:] = data[width * 3:]
+    rc = [[0] * height for i in range(width)]
+    for y in range(height):
+        for x in range(width):
+            rc[x][y] = img[y][x]
+    return rc
+
 # Read image data.
 splash = input()
 width  = int(input())
@@ -96,7 +126,7 @@ offx = (640 - width * charx) // 2
 offy = (480 - height * chary) // 2
 
 # Buffers for layers.
-# TODO splash = ... (splash)
+splash     = load_p6(splash)
 background = [[0] * (height * chary) for i in range(width * charx)]
 foreground = [[0] * (height * chary) for i in range(width * charx)]
 shadow     = [[0] * (height * chary) for i in range(width * charx)]
@@ -169,5 +199,8 @@ print('255')
 trans = ['%i' % i for i in range(256)]
 for y in range(height):
     for x in range(width):
-        print(trans[splash[x][y]])
+        (a, r, g, b) = subpixels(splash[x][y])
+        print(trans[r])
+        print(trans[g])
+        print(trans[b])
 
